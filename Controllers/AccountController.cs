@@ -35,6 +35,7 @@ namespace SportsStore.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
+                    await _cartService.MergeSessionToDbAsync(model.Username);
                     return RedirectToAction("Index", "Home");
                 }
                 foreach (IdentityError error in result.Errors)
@@ -57,7 +58,7 @@ namespace SportsStore.Controllers
                         model.Username, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    await _cartService.MergeSessionToDbAsync();
+                    await _cartService.MergeSessionToDbAsync(model.Username);
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng.");

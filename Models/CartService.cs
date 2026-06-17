@@ -84,8 +84,13 @@ namespace SportsStore.Models
         {
             var httpContext = _http.HttpContext;
             if (httpContext?.User?.Identity?.IsAuthenticated != true) return;
+            await MergeSessionToDbAsync(httpContext.User.Identity.Name!);
+        }
 
-            var userId = httpContext.User.Identity.Name!;
+        public async Task MergeSessionToDbAsync(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) return;
+
             var sessionStore = new SessionCartStore(_http);
             var sessionCart = await sessionStore.GetAsync();
             if (!sessionCart.Lines.Any()) return;

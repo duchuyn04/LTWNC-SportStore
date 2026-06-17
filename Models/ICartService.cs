@@ -11,6 +11,7 @@ namespace SportsStore.Models
         Task<Cart> GetCartAsync();
         Task ClearAsync();
         Task MergeSessionToDbAsync();
+        Task MergeSessionToDbAsync(string userId);
         Task CreateOrderAsync(CheckoutViewModel model);
     }
 }
