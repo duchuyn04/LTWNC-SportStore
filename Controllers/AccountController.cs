@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SportsStore.Models;
 using SportsStore.Models.ViewModels;
 
 namespace SportsStore.Controllers
@@ -8,12 +9,14 @@ namespace SportsStore.Controllers
     {
         private UserManager<IdentityUser> userManager;
         private SignInManager<IdentityUser> signInManager;
+        private readonly ICartService _cartService;
 
         public AccountController(UserManager<IdentityUser> userMgr,
-            SignInManager<IdentityUser> signInMgr)
+            SignInManager<IdentityUser> signInMgr, ICartService cartService)
         {
             userManager = userMgr;
             signInManager = signInMgr;
+            _cartService = cartService;
         }
 
         public IActionResult Register() => View();
@@ -54,6 +57,7 @@ namespace SportsStore.Controllers
                         model.Username, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
+                    await _cartService.MergeSessionToDbAsync();
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng.");

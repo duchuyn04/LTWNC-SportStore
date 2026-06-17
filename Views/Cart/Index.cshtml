@@ -1,0 +1,66 @@
+@model Cart
+
+<h3 class="mb-4">Giỏ hàng</h3>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">@TempData["Message"]</div>
+}
+
+@if (!Model.Lines.Any())
+{
+    <p>Giỏ hàng của bạn đang trống.</p>
+    <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index">Tiếp tục mua sắm</a>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var line in Model.Lines)
+            {
+                <tr>
+                    <td>@line.Product?.Name</td>
+                    <td>@line.Product?.Price.ToString("N0") đ</td>
+                    <td>
+                        <form asp-action="Minus" method="post" class="d-inline">
+                            <input type="hidden" name="productId" value="@line.ProductID" />
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">-</button>
+                        </form>
+                        <span class="mx-2">@line.Quantity</span>
+                        <form asp-action="Plus" method="post" class="d-inline">
+                            <input type="hidden" name="productId" value="@line.ProductID" />
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
+                        </form>
+                    </td>
+                    <td>@((line.Quantity * (line.Product?.Price ?? 0)).ToString("N0")) đ</td>
+                    <td>
+                        <form asp-action="Remove" method="post">
+                            <input type="hidden" name="productId" value="@line.ProductID" />
+                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Tổng cộng</strong></td>
+                <td colspan="2"><strong>@Model.ComputeTotalValue().ToString("N0") đ</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="d-flex justify-content-between">
+        <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Tiếp tục mua sắm</a>
+        <a class="btn btn-primary" asp-action="Checkout">Thanh toán</a>
+    </div>
+}

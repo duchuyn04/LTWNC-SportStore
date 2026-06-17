@@ -1,0 +1,49 @@
+@model List<Order>
+
+<h3 class="mb-4">Lịch sử đơn hàng</h3>
+
+@if (!Model.Any())
+{
+    <p>Bạn chưa có đơn hàng nào.</p>
+}
+else
+{
+    @foreach (var order in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between">
+                <span>Đơn hàng #@order.OrderID</span>
+                <span>@order.OrderedAt.ToLocalTime().ToString("g")</span>
+            </div>
+            <div class="card-body">
+                <p class="mb-1"><strong>NgườI nhận:</strong> @order.Name</p>
+                <p class="mb-1"><strong>Địa chỉ:</strong> @order.Address</p>
+                <p class="mb-1"><strong>Điện thoại:</strong> @order.Phone</p>
+                <table class="table table-sm table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var line in order.Lines)
+                        {
+                            <tr>
+                                <td>@line.Product?.Name</td>
+                                <td>@line.Quantity</td>
+                                <td>@line.Price.ToString("N0") đ</td>
+                                <td>@((line.Quantity * line.Price).ToString("N0")) đ</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <p class="text-end"><strong>Tổng: @order.TotalValue.ToString("N0") đ</strong></p>
+            </div>
+        </div>
+    }
+}
+
+<a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Quay lại</a>

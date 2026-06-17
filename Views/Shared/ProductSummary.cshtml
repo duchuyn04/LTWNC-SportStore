@@ -7,5 +7,14 @@
             <span class="price-badge">@Model?.Price.ToString("c")</span>
         </div>
         <div class="card-text">@Model?.Description</div>
+
+        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="mt-3">
+            <input type="hidden" name="productId" value="@Model?.ProductID" />
+            <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
+            <div class="input-group input-group-sm" style="max-width: 220px;">
+                <input type="number" name="quantity" value="1" min="1" class="form-control" />
+                <button type="submit" class="btn btn-outline-primary">Thêm vào giỏ</button>
+            </div>
+        </form>
     </div>
 </div>
