@@ -1,0 +1,23 @@
+@model Product
+
+<h4 class="mb-4">📄 Chi tiết sản phẩm</h4>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Tên</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Mô tả</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Giá</dt>
+            <dd class="col-sm-9">@Model.Price.ToString(format: "N0") đ</dd>
+
+            <dt class="col-sm-3">Danh mục</dt>
+            <dd class="col-sm-9"><span class="badge bg-secondary">@Model.Category</span></dd>
+        </dl>
+    </div>
+</div>
+
+<a class="btn btn-outline-secondary mt-3" asp-action="Index">⬅ Quay lại danh sách</a>

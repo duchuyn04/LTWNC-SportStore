@@ -1,0 +1,59 @@
+@model List<Product>
+@using SportsStore.Models.ViewModels
+@{
+    Layout = "_Layout";
+}
+
+<h3 class="mb-4">Danh sách sản phẩm</h3>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>Giá</th>
+            <th>Danh mục</th>
+            <th>Ảnh</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.ProductID</td>
+                <td>@p.Name</td>
+                <td>@p.Price.ToString("N0")</td>
+                <td>@p.Category</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(p.ImagePro))
+                    {
+                        <img src="@p.ImagePro" alt="@p.Name" style="max-width:80px" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var paging = ViewBag.PagingInfo as PagingInfo;
+}
+
+@if (paging != null && paging.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= paging.TotalPages; i++)
+            {
+                <li class="page-item @(i == paging.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="ProductList" asp-route-page="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

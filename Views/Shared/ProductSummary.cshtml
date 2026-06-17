@@ -1,0 +1,11 @@
+@model Product
+
+<div class="card product-card mb-3">
+    <div class="card-body">
+        <div class="card-title">
+            <span>@Model?.Name</span>
+            <span class="price-badge">@Model?.Price.ToString("c")</span>
+        </div>
+        <div class="card-text">@Model?.Description</div>
+    </div>
+</div>
