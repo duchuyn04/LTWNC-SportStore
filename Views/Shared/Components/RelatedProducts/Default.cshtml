@@ -1,0 +1,14 @@
+@model List<Product>
+
+@if (Model.Any())
+{
+    <div class="product-detail-section">
+        <h2 class="page-title-sm">Sản phẩm liên quan</h2>
+        <div class="product-grid">
+            @foreach (var p in Model)
+            {
+                <partial name="ProductSummary" model="p" />
+            }
+        </div>
+    </div>
+}
