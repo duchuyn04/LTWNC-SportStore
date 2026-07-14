@@ -1,0 +1,51 @@
+@model Product
+@{
+    var images = Model?.Images?
+        .OrderBy(i => i.DisplayOrder)
+        .Select(i => i.ImagePath)
+        .Where(p => !string.IsNullOrEmpty(p))
+        .Cast<string>()
+        .ToList() ?? new List<string>();
+
+    if (!string.IsNullOrEmpty(Model?.ImagePro) && !images.Contains(Model.ImagePro))
+    {
+        images.Insert(0, Model.ImagePro);
+    }
+
+    var primaryImage = images.FirstOrDefault() ?? "";
+    var mainId = $"gallery-main-{Model?.ProductID}";
+    var lensId = $"gallery-lens-{Model?.ProductID}";
+    var resultId = $"gallery-result-{Model?.ProductID}";
+}
+
+<div class="product-gallery">
+    <div class="gallery-main-wrap">
+        @if (!string.IsNullOrEmpty(primaryImage))
+        {
+            <img id="@mainId" class="gallery-main-image" src="@primaryImage" alt="@Model?.Name" data-current-src="@primaryImage" />
+            <div class="gallery-zoom-lens" id="@lensId"></div>
+            <div class="gallery-zoom-result" id="@resultId"></div>
+        }
+        else
+        {
+            <div class="gallery-placeholder">
+                <span class="placeholder-text">@Model?.Category</span>
+            </div>
+        }
+    </div>
+
+    @if (images.Count > 1)
+    {
+        <div class="gallery-thumbnails">
+            @foreach (var img in images)
+            {
+                <button type="button" class="gallery-thumb @(img == primaryImage ? "active" : "")"
+                        data-main-target="@mainId"
+                        data-src="@img"
+                        aria-label="Xem ảnh">
+                    <img src="@img" alt="@Model?.Name" loading="lazy" />
+                </button>
+            }
+        </div>
+    }
+</div>
