@@ -1,0 +1,30 @@
+@model Product
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<div class="product-detail-page">
+    <partial name="_ProductBreadcrumb" model="Model" />
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert ss-alert ss-alert-success mb-4">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert ss-alert ss-alert-danger mb-4">@TempData["ErrorMessage"]</div>
+    }
+
+    <div class="row g-4 align-items-start">
+        <div class="col-lg-6">
+            @await Component.InvokeAsync("ProductGallery", new { productId = Model.ProductID })
+        </div>
+        <div class="col-lg-6">
+            @await Component.InvokeAsync("ProductInfo", new { productId = Model.ProductID })
+        </div>
+    </div>
+
+    @await Component.InvokeAsync("ProductDescriptionTabs", new { product = Model })
+    @await Component.InvokeAsync("ProductReviews", new { productId = Model.ProductID })
+    @await Component.InvokeAsync("RelatedProducts", new { category = Model.Category, excludeId = Model.ProductID })
+</div>

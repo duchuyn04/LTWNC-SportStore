@@ -65,6 +65,19 @@ namespace SportsStore.Controllers
                 }
             });
 
+        public IActionResult Detail(long id)
+        {
+            var product = repository.Products
+                .FirstOrDefault(p => p.ProductID == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> AddReview(ProductReview review, long productId)

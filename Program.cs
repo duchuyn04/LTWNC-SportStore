@@ -30,9 +30,16 @@ app.UseStaticFiles();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapControllerRoute("products",
+    "Products",
+    new { Controller = "Home", action = "Products" });
 app.MapControllerRoute("pagination",
     "Products/Page{productPage}",
-    new { Controller = "Home", action = "Index" });
+    new { Controller = "Home", action = "Products" });
+app.MapControllerRoute("productDetail",
+    "Products/Detail/{id:long}",
+    new { Controller = "Home", action = "Detail" });
 app.MapDefaultControllerRoute();
 SeedData.EnsurePopulated(app);
+IdentitySeedData.EnsurePopulated(app).Wait();
 app.Run();
