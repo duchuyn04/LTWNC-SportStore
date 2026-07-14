@@ -9,10 +9,8 @@ namespace SportsStore.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long ReviewID { get; set; }
 
-        [Required]
         public long ProductID { get; set; }
 
-        [Required]
         public string UserName { get; set; } = string.Empty;
 
         [Range(1, 5)]
