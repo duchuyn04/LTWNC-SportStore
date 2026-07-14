@@ -8,8 +8,10 @@ namespace SportsStore.Models
     {
         public StoreDbContext(DbContextOptions<StoreDbContext> options) : base(options) { }
         public DbSet<Product> Products => Set<Product>();
+        public DbSet<ProductImage> ProductImages => Set<ProductImage>();
         public DbSet<CartItem> CartItems => Set<CartItem>();
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderLine> OrderLines => Set<OrderLine>();
+        public DbSet<ProductReview> ProductReviews => Set<ProductReview>();
     }
 }

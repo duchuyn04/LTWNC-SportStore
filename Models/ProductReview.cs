@@ -1,0 +1,26 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace SportsStore.Models
+{
+    public class ProductReview
+    {
+        public long ReviewID { get; set; }
+
+        [Required]
+        public long ProductID { get; set; }
+
+        [Required]
+        public string UserName { get; set; } = string.Empty;
+
+        [Range(1, 5)]
+        public int Rating { get; set; }
+
+        [Required(ErrorMessage = "Vui lòng nhập nội dung đánh giá")]
+        [StringLength(1000)]
+        public string Comment { get; set; } = string.Empty;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public Product? Product { get; set; }
+    }
+}
