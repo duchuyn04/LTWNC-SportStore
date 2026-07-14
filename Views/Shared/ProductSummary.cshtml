@@ -1,20 +1,49 @@
 @model Product
+@{
+    var images = Model.Images?.OrderBy(i => i.DisplayOrder).Select(i => i.ImagePath).Where(p => !string.IsNullOrEmpty(p)).Cast<string>().ToList() ?? new List<string>();
+    if (!string.IsNullOrEmpty(Model.ImagePro) && !images.Contains(Model.ImagePro))
+    {
+        images.Insert(0, Model.ImagePro);
+    }
+    var primaryImage = images.FirstOrDefault() ?? "";
+}
 
-<div class="card product-card mb-3">
+<div class="product-card gsap-stagger-item">
+    <a class="product-image" asp-controller="Home" asp-action="Detail" asp-route-id="@Model.ProductID" aria-label="Xem chi tiết @Model.Name">
+        @if (!string.IsNullOrEmpty(primaryImage))
+        {
+            <img src="@primaryImage" alt="@Model.Name" loading="lazy" />
+            @if (images.Count > 1)
+            {
+                <span class="image-count">+@images.Count</span>
+            }
+        }
+        else
+        {
+            <span class="placeholder-text">@Model?.Category</span>
+        }
+    </a>
     <div class="card-body">
         <div class="card-title">
-            <span>@Model?.Name</span>
-            <span class="price-badge">@Model?.Price.ToString("c")</span>
+            <a asp-controller="Home" asp-action="Detail" asp-route-id="@Model?.ProductID" class="product-title-link">
+                <span>@Model?.Name</span>
+            </a>
+            <span class="price-badge">@Model?.Price.ToString("N0") đ</span>
         </div>
-        <div class="card-text">@Model?.Description</div>
+        <p class="card-text">@Model?.Description</p>
 
-        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="mt-3">
+        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="product-actions">
             <input type="hidden" name="productId" value="@Model?.ProductID" />
             <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
-            <div class="input-group input-group-sm" style="max-width: 220px;">
-                <input type="number" name="quantity" value="1" min="1" class="form-control" />
-                <button type="submit" class="btn btn-outline-primary">Thêm vào giỏ</button>
-            </div>
+            <input type="number" name="quantity" value="1" min="1" class="form-control" aria-label="Số lượng" />
+            <button type="submit" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="me-1">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                Thêm
+            </button>
         </form>
     </div>
 </div>
