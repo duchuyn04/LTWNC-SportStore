@@ -1,9 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SportsStore.Models
 {
     public class ProductReview
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long ReviewID { get; set; }
 
         [Required]
