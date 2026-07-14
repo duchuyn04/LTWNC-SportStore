@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using SportsStore.Data;
+using SportsStore.Models;
 using SportsStore.Models.ViewModels;
 
-namespace SportsStore.Models
+namespace SportsStore.Services
 {
     public class CartService : ICartService
     {

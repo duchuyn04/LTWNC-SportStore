@@ -1,8 +1,9 @@
+using SportsStore.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace SportsStore.Models
+namespace SportsStore.Data
 {
     public class StoreDbContext : IdentityDbContext<IdentityUser>
     {

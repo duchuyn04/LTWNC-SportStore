@@ -1,6 +1,7 @@
+using SportsStore.Models;
 using SportsStore.Models.ViewModels;
 
-namespace SportsStore.Models
+namespace SportsStore.Services
 {
     public interface ICartService
     {

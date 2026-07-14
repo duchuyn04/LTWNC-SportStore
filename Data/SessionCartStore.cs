@@ -1,6 +1,7 @@
+using SportsStore.Models;
 using System.Text.Json;
 
-namespace SportsStore.Models
+namespace SportsStore.Data
 {
     public class SessionCartStore : ICartStore
     {

@@ -1,4 +1,7 @@
-namespace SportsStore.Models
+using SportsStore.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace SportsStore.Data
 {
     public class EFStoreRepository : IStoreRepository
     {
@@ -7,6 +10,6 @@ namespace SportsStore.Models
         {
             context = ctx;
         }
-        public IQueryable<Product> Products => context.Products;
+        public IQueryable<Product> Products => context.Products.Include(p => p.Images);
     }
 }

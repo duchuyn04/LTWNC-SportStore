@@ -1,3 +1,5 @@
+using SportsStore.Services;
+using SportsStore.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SportsStore.Models;

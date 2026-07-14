@@ -1,3 +1,4 @@
+using SportsStore.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportsStore.Models;

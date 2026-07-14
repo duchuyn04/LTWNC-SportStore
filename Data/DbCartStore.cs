@@ -1,6 +1,7 @@
+using SportsStore.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace SportsStore.Models
+namespace SportsStore.Data
 {
     public class DbCartStore : ICartStore
     {

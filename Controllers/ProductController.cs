@@ -1,3 +1,4 @@
+using SportsStore.Data;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ using SportsStore.Models.ViewModels;
 
 namespace SportsStore.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private StoreDbContext context;
