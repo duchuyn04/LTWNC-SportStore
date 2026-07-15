@@ -81,11 +81,18 @@ builder.Services.AddAuthentication(options =>
     };
 
     // Đọc JWT từ cookie HttpOnly thay vì Authorization header.
+    // Khi chưa đăng nhập, redirect về trang login thay vì trả 401.
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
         {
             context.Token = context.Request.Cookies["access_token"];
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
+            context.HandleResponse();
+            context.Response.Redirect("/Account/Login");
             return Task.CompletedTask;
         }
     };
