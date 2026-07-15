@@ -125,8 +125,15 @@ app.MapControllerRoute("productDetail",
     "Products/Detail/{id:long}",
     new { Controller = "Home", action = "Detail" });
 
-// Route mặc định cho các controller/action thông thường.
-app.MapDefaultControllerRoute();
+// Route dành cho các Area (ví dụ: /Admin, /Admin/Create, /Admin/Orders/...).
+// Controller mặc định là Admin để URL gọn hơn, chỉ cần area và action.
+app.MapControllerRoute(
+    name: "admin",
+    pattern: "{area:exists}/{action=Index}/{id?}",
+    defaults: new { controller = "Admin" });
+
+// Route mặc định cho các controller/action thông thường (không thuộc Area).
+app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 
 // Seed dữ liệu mẫu cho sản phẩm và tài khoản admin mặc định.
 

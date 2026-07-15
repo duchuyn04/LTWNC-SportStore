@@ -1,7 +1,7 @@
 @model Product
 @using System.Text.Json
 @{
-    Layout = "_Layout";
+    Layout = "_LayoutAdmin";
 
     var json = TempData.Peek("CategoryList")?.ToString();
     TempData.Keep("CategoryList");
@@ -13,24 +13,26 @@
     }
 }
 
-<h1 class="page-title gsap-reveal">Thêm sản phẩm</h1>
+<h1 class="page-title gsap-reveal">Sửa sản phẩm #@Model.ProductID</h1>
 
 <div class="row">
     <div class="col-lg-8">
         <div class="ss-form-card gsap-reveal">
             <div asp-validation-summary="ModelOnly" class="ss-alert ss-alert-danger mb-3" role="alert"></div>
 
-            <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="ProductID" />
+
                 <div class="row g-3">
                     <div class="col-md-8">
                         <label asp-for="Name" class="form-label">Tên sản phẩm</label>
-                        <input asp-for="Name" class="form-control" placeholder="VD: Giày chạy bộ Nike Air" />
+                        <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger small"></span>
                     </div>
                     <div class="col-md-4">
                         <label asp-for="Price" class="form-label">Giá</label>
                         <div class="input-group">
-                            <input asp-for="Price" class="form-control" placeholder="1.500.000" />
+                            <input asp-for="Price" class="form-control" />
                             <span class="input-group-text">đ</span>
                         </div>
                         <span asp-validation-for="Price" class="text-danger small"></span>
@@ -39,7 +41,7 @@
 
                 <div class="mt-3">
                     <label asp-for="Description" class="form-label">Mô tả</label>
-                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Mô tả ngắn về sản phẩm"></textarea>
+                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                 </div>
 
                 <div class="row g-3 mt-1">
@@ -51,7 +53,14 @@
                             {
                                 @foreach (var cate in categories)
                                 {
-                                    <option value="@cate.NameCate">@cate.NameCate</option>
+                                    if (cate.NameCate == Model.Category)
+                                    {
+                                        <option value="@cate.NameCate" selected>@cate.NameCate</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@cate.NameCate">@cate.NameCate</option>
+                                    }
                                 }
                             }
                         </select>
@@ -63,9 +72,36 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="imageFiles" class="form-label">Ảnh sản phẩm</label>
+                    <label class="form-label">Ảnh sản phẩm hiện tại</label>
+                    @if (Model.Images != null && Model.Images.Any())
+                    {
+                        <div class="row g-2 mb-3">
+                            @foreach (var img in Model.Images.OrderBy(i => i.DisplayOrder))
+                            {
+                                <div class="col-4 col-md-3">
+                                    <div class="position-relative border rounded p-1">
+                                        <img src="@img.ImagePath" alt="@Model.Name" class="img-fluid rounded" style="aspect-ratio:1/1; object-fit:cover;" />
+                                        @if (img.IsPrimary)
+                                        {
+                                            <span class="badge bg-primary position-absolute top-0 start-0 m-1">Chính</span>
+                                        }
+                                        <div class="form-check mt-1">
+                                            <input type="checkbox" name="removeImageIds" value="@img.ProductImageId" class="form-check-input" id="remove-@img.ProductImageId" />
+                                            <label class="form-check-label small" for="remove-@img.ProductImageId">Xóa</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted small">Chưa có ảnh nào.</p>
+                    }
+
+                    <label for="imageFiles" class="form-label">Thêm ảnh mới</label>
                     <input type="file" id="imageFiles" name="imageFiles" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" multiple />
-                    <div class="form-text text-muted small">Chọn nhiều ảnh. Ảnh đầu tiên sẽ là ảnh chính. Hỗ trợ JPG, PNG, GIF, WebP. Tối đa 5MB/ảnh. Ảnh sẽ được cắt vuông 1:1.</div>
+                    <div class="form-text text-muted small">Chọn nhiều ảnh để thêm. Ảnh đầu tiên trong danh sách còn lại sẽ là ảnh chính. Hỗ trợ JPG, PNG, GIF, WebP. Tối đa 5MB/ảnh. Ảnh sẽ được cắt vuông 1:1.</div>
                 </div>
 
                 <div class="d-flex gap-2 mt-4">
@@ -75,7 +111,7 @@
                             <polyline points="17 21 17 13 7 13 7 21"></polyline>
                             <polyline points="7 3 7 8 15 8"></polyline>
                         </svg>
-                        Lưu sản phẩm
+                        Cập nhật
                     </button>
                     <a asp-action="Index" class="btn btn-outline-secondary">Danh sách</a>
                 </div>
