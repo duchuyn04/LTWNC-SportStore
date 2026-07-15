@@ -1,0 +1,91 @@
+@model List<Product>
+@using SportsStore.Models.ViewModels
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 gsap-reveal">
+    <h1 class="page-title mb-0">Quản trị sản phẩm</h1>
+    <a asp-action="Create" class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="me-1">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Thêm sản phẩm
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="ss-alert ss-alert-success mb-4 gsap-reveal" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="ss-alert ss-alert-danger mb-4 gsap-reveal" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="table-responsive gsap-reveal">
+    <table class="ss-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên</th>
+                <th>Giá</th>
+                <th>Danh mục</th>
+                <th>Ảnh</th>
+                <th style="width:160px">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr class="gsap-stagger-item">
+                    <td class="fw-semibold">@p.ProductID</td>
+                    <td>@p.Name</td>
+                    <td>@p.Price.ToString("N0") đ</td>
+                    <td><span class="ss-badge ss-badge-secondary">@p.Category</span></td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(p.ImagePro))
+                        {
+                            <img src="@p.ImagePro" alt="@p.Name" style="max-width:80px; border-radius: var(--radius-md);" />
+                        }
+                        else
+                        {
+                            <span class="text-muted small">—</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@p.ProductID" class="btn btn-sm btn-outline-primary me-1">Sửa</a>
+                        <form asp-action="Delete" method="post" class="d-inline"
+                              onsubmit="return confirm('Xóa sản phẩm này?');">
+                            <input type="hidden" name="id" value="@p.ProductID" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    var paging = ViewBag.PagingInfo as PagingInfo;
+}
+
+@if (paging != null && paging.TotalPages > 1)
+{
+    <nav class="mt-4 gsap-reveal">
+        <ul class="pagination ss-pagination justify-content-end">
+            @for (int i = 1; i <= paging.TotalPages; i++)
+            {
+                <li class="page-item @(i == paging.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
